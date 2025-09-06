@@ -1,0 +1,2 @@
+The app layer comprehends all the application and user focused layer, it makes use and depends on the work of the 
+edge data acquisition and fog data transformation and loading to the applicationd database.

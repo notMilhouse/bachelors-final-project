@@ -1,0 +1,17 @@
+The app layer comprehends all the application and user focused layer, it makes use and depends on the work of the 
+edge data acquisition and fog data transformation and loading to the applicationd database.
+The fog layer comprehends the mqtt broker and data loader and face recognition service
+
+It is called fog layer because it serves a bridging or support layer between the edge (arduino and hardware level)
+and the app layer.
+
+
+The edge layer includes the arduino and sensor data acquisition layer
+
+
+Altogether, the last entity in each layer is the first in the next layer
+
+ sensor -> arduino -> mqtt -> worker/loader -> database -> api -> api-client
+
+[----------------------][---------------------------][-----------------------]
+        edge layer            fog layer                  app layer

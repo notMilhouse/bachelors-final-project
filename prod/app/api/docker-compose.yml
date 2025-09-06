@@ -1,0 +1,62 @@
+# API Services - prod/app/api/docker-compose.yml
+version: '3.8'
+
+services:
+  kotlin-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user_metrics_api
+    environment:
+      DATABASE_URL: jdbc:postgresql://user_metrics_postgres:5432/user_metrics_app
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-app_user}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-app_password}
+      REDIS_HOST: user_metrics_redis
+      REDIS_PORT: 6379
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: ${ENVIRONMENT:-development}
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_here}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+
+    ports:
+      - "${API_PORT:-8080}:8080"
+    volumes:
+      - api_uploads:/app/uploads
+    networks:
+      - user_metrics_default
+    depends_on:
+      - db_health_check
+    restart: unless-stopped
+
+  db_health_check:
+    image: postgres:15-alpine
+    container_name: api_db_health_check
+    command: |
+      sh -c "
+        echo 'Waiting for database...'
+        until pg_isready -h user_metrics_postgres -p 5432 -U app_user -d user_metrics_app; do
+          sleep 3
+        done
+        echo 'Database is ready!'
+      "
+    networks:
+      - user_metrics_default
+    depends_on:
+      - external_services
+
+  external_services:
+    image: alpine:latest
+    container_name: external_services_ref
+    command: "echo 'External services reference'"
+    networks:
+      - user_metrics_default
+
+volumes:
+  api_uploads:
+    driver: local
+    name: user_metrics_api_uploads
+
+networks:
+  user_metrics_default:
+    external: true
+    name: user_metrics_default

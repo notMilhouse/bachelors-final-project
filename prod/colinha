@@ -1,0 +1,14 @@
+# Start everything
+cd prod/app/db/ && docker-compose up -d
+cd ../api/ && docker-compose up -d
+
+# Stop everything  
+cd prod/app/api/ && docker-compose down
+cd ../db/ && docker-compose down
+
+# View logs
+docker logs user_metrics_postgres -f
+docker logs user_metrics_api -f
+
+# Database access
+docker exec -it user_metrics_postgres psql -U app_user -d user_metrics_app

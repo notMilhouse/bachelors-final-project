@@ -1,0 +1,6 @@
+The fog layer comprehends the mqtt broker and data loader and face recognition service
+
+It is called fog layer because it serves a bridging or support layer between the edge (arduino and hardware level)
+and the app layer.
+
+
