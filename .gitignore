@@ -1,0 +1,273 @@
+# ============================================================================
+# prod/app/api/.gitignore - Kotlin API Specific
+# ============================================================================
+
+# Build outputs
+build/
+target/
+out/
+
+# Gradle
+.gradle/
+gradle-app.setting
+
+# IntelliJ IDEA
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/libraries
+.idea/gradle.xml
+
+# Application logs
+logs/
+*.log
+
+# Environment files
+.env
+application-local.yml
+application-secret.yml
+
+# Uploads
+uploads/
+media/
+
+# Database files
+*.db
+*.sqlite
+
+# Test reports
+test-results/
+junit-reports/
+
+# ============================================================================
+# prod/app/web/.gitignore - Vue.js Frontend Specific
+# ============================================================================
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+/dist
+/build
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+*.lcov
+.nyc_output
+
+# Cache
+.cache/
+.parcel-cache/
+
+# ============================================================================
+# prod/app/mobile/.gitignore - Kotlin Mobile Specific
+# ============================================================================
+
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.ipa
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file
+local.properties
+
+# IntelliJ
+*.iml
+.idea/
+
+# Android Studio
+captures/
+.navigation/
+
+# Keystore files
+*.jks
+*.keystore
+
+# External native build folder
+.externalNativeBuild
+.cxx/
+
+# Google Services
+google-services.json
+GoogleService-Info.plist
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# ============================================================================
+# prod/app/db/.gitignore - Database Specific
+# ============================================================================
+
+# Backup files
+backups/*.sql
+backups/*.dump
+
+# Environment files
+.env
+
+# PostgreSQL files
+*.pgsql
+
+# Logs
+postgres-logs/
+
+# pgAdmin files
+pgadmin-data/
+
+# Keep init scripts but ignore dumps
+!init-scripts/
+init-scripts/*.dump
+
+# ============================================================================
+# prod/worker/.gitignore - Worker Services Specific
+# ============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Virtual environments
+.env
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Machine learning models
+*.pkl
+*.model
+*.h5
+*.pb
+
+# MQTT logs
+mqtt-logs/
+
+# Face recognition data
+training-data/
+face-embeddings/
+models/
+
+# ============================================================================
+# prod/esp/.gitignore - ESP32/IoT Specific  
+# ============================================================================
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+lib_deps/
+
+# Arduino IDE
+*.hex
+*.bin
+*.elf
+
+# Build files
+build/
+*.o
+*.a
+
+# WiFi credentials
+wifi_config.h
+secrets.h
+
+# Calibration data
+calibration/
+*.cal
+
+# Firmware backups
+firmware-backup/
+
+# ============================================================================
+# thesis-proposal/.gitignore - LaTeX Thesis Specific
+# ============================================================================
+
+# LaTeX auxiliary files
+*.aux
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+
+# Bibliography auxiliary files
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool auxiliary files
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# Build directories
+build/
+out/
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
