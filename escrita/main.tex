@@ -11,8 +11,8 @@ a4paper,     % tamanho do papel
 % -- opções do pacote polyglossia --
 % french,      % idioma adicional para hifenizacao
 % spanish,     % idioma adicional para hifenizacao
-english,       % idioma adicional para hifenizacao
-brazil        % ultimo idioma eh o principal do documento
+brazil,       % idioma adicional para hifenizacao
+english       % ultimo idioma eh o principal do documento
 %
 % ppgca.cls options
 %
@@ -44,21 +44,20 @@ brazil        % ultimo idioma eh o principal do documento
 
 % O preambulo deve conter o tipo do trabalho, o objetivo,
 % o nome da instituição e a área de concentração
-\preambulo{Modelo canônico de trabalho monográfico acadêmico em conformidade com
-as normas ABNT.}
+\preambulo{Final Paper for the Bachelor in Computer Science program under Departamento de Computação e Matemática of the Universidade de São Paulo}
 
 \usepackage{blindtext}
-\usepackage{lipsum}                             % para geração de dummy text
+
 %---
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
-\title{Título do trabalho}
-\author{Nome do autor}
+\title{An IoT Smart Scale Proof of Concept for Smart Homes}
+\author{Gabriel Carvalho Silva}
 \local{Ribeirão Preto--SP}
-\data{2020}
-\orientador{Nome do orientador}
+\data{2025}
+\orientador{Cléver Ricardo Guareis de Farias}
 \coorientador{}
-\tipotrabalho{Dissertação} % Dissertação ou Tese
+\tipotrabalho{Final Paper} % Dissertação ou Tese
 
 % ---
 % Espaçamentos entre linhas e parágrafos
@@ -114,7 +113,7 @@ as normas ABNT.}
 
 %---
 % Imprime a folha de rosto em inglês (Opcional)
-\coversheet{Title in english}
+% \coversheet{Title in english}
 %---
 
 % ---
@@ -147,18 +146,15 @@ as normas ABNT.}
         \hspace{0.5cm} \thelastpage p. : il.; 30 cm.\\
 
         \hspace{0.5cm}
-        \parbox[t]{\textwidth}{\imprimirtipotrabalho\ apresentada à
+        \parbox[t]{\textwidth}{\imprimirtipotrabalho\ submitted to the
           Faculdade de Filosofia, Ciências e Letras \\
-          de Ribeirão Preto da USP, como parte das exigências para \\
-          a obtenção do título de Mestre em Ciências, \\
-          Área: Computação
-          Aplicada.}\\
+          de Ribeirão Preto da USP, as part of the requirements for obtaining a Bachelor's degree in Computer Science.
 
         \hspace{0.5cm} \imprimirorientadorRotulo~\imprimirorientador\\
 
         \hspace{0.5cm}
-                1. Palavra-chave1. 2. Palavra-chave2. 3. Palavra-chave3.
-        \end{minipage}}
+                1. IoT. 2. Embedded Systems. 3. Event-driven Architecture.
+        \end{minipage}}}
         \end{center}
       \end{fichacatalografica}
       \cleardoublepage
@@ -167,30 +163,30 @@ as normas ABNT.}
 % ---
 % Inserir errata
 % ---
-\begin{errata}
-Elemento opcional da NBR14724:2011. Exemplo:
+% \begin{errata}
+% Elemento opcional da NBR14724:2011. Exemplo:
 
-\vspace{\onelineskip}
+% \vspace{\onelineskip}
 
-FERRIGNO, C. R. A. \textbf{Tratamento de neoplasias ósseas apendiculares com
-reimplantação de enxerto ósseo autólogo autoclavado associado ao plasma
-rico em plaquetas}: estudo crítico na cirurgia de preservação de membro em
-cães. 2011. 128 f. Tese (Livre-Docência) - Faculdade de Medicina Veterinária e
-Zootecnia, Universidade de São Paulo, São Paulo, 2011.
+% FERRIGNO, C. R. A. \textbf{Tratamento de neoplasias ósseas apendiculares com
+% reimplantação de enxerto ósseo autólogo autoclavado associado ao plasma
+% rico em plaquetas}: estudo crítico na cirurgia de preservação de membro em
+% cães. 2011. 128 f. Tese (Livre-Docência) - Faculdade de Medicina Veterinária e
+% Zootecnia, Universidade de São Paulo, São Paulo, 2011.
 
-\begin{table}[htb]
-\center
-\footnotesize
-\begin{tabular}{|p{1.4cm}|p{1cm}|p{3cm}|p{3cm}|}
-  \hline
-   \textbf{Folha} & \textbf{Linha}  & \textbf{Onde se lê}  & \textbf{Leia-se}  \\
-    \hline
-    1 & 10 & auto-conclavo & autoconclavo\\
-   \hline
-\end{tabular}
-\end{table}
+% \begin{table}[htb]
+% \center
+% \footnotesize
+% \begin{tabular}{|p{1.4cm}|p{1cm}|p{3cm}|p{3cm}|}
+%   \hline
+%    \textbf{Folha} & \textbf{Linha}  & \textbf{Onde se lê}  & \textbf{Leia-se}  \\
+%     \hline
+%     1 & 10 & auto-conclavo & autoconclavo\\
+%    \hline
+% \end{tabular}
+% \end{table}
 
-\end{errata}
+% \end{errata}
 % ---
 
 % ---
@@ -206,41 +202,41 @@ Zootecnia, Universidade de São Paulo, São Paulo, 2011.
 % \includepdf{folhadeaprovacao_final.pdf}
 % \end{folhadeaprovacao}
 %
-\begin{folhadeaprovacao}
+% \begin{folhadeaprovacao}
 
-  \begin{center}
-    {\theauthor}
+%   \begin{center}
+%     {\theauthor}
 
-    \vspace*{\fill}\vspace*{\fill}
-    \thetitle
-    \vspace*{\fill}
+%     \vspace*{\fill}\vspace*{\fill}
+%     \thetitle
+%     \vspace*{\fill}
 
-    \hspace{.45\textwidth}
-    \begin{minipage}{.5\textwidth}
-        \imprimirpreambulo
-    \end{minipage}%
-    \vspace*{\fill}
-   \end{center}
+%     \hspace{.45\textwidth}
+%     \begin{minipage}{.5\textwidth}
+%         \imprimirpreambulo
+%     \end{minipage}%
+%     \vspace*{\fill}
+%    \end{center}
 
-   Trabalho aprovado. \imprimirlocal, 21 de novembro de 2018:
+%    Trabalho aprovado. \imprimirlocal, 21 de novembro de 2018:
 
-   \assinatura{\textbf{\thesupervisorlabel:} \\ Orientador}
-   \assinatura{\textbf{Professor} \\ Convidado 1}
-   \assinatura{\textbf{Professor} \\ Convidado 2}
-   \ifthenelse{\equal{\imprimirtipotrabalho}{Tese}}{
-     \assinatura{\textbf{Professor} \\ Convidado 3}
-     \assinatura{\textbf{Professor} \\ Convidado 4}
-   }{}
+%    \assinatura{\textbf{\thesupervisorlabel:} \\ Orientador}
+%    \assinatura{\textbf{Professor} \\ Convidado 1}
+%    \assinatura{\textbf{Professor} \\ Convidado 2}
+%    \ifthenelse{\equal{\imprimirtipotrabalho}{Tese}}{
+%      \assinatura{\textbf{Professor} \\ Convidado 3}
+%      \assinatura{\textbf{Professor} \\ Convidado 4}
+%    }{}
 
-   \begin{center}
-    \vspace*{0.5cm}
-    {\large\imprimirlocal}
-    \par
-    {\large\imprimirdata}
-    \vspace*{1cm}
-  \end{center}
+%    \begin{center}
+%     \vspace*{0.5cm}
+%     {\large\imprimirlocal}
+%     \par
+%     {\large\imprimirdata}
+%     \vspace*{1cm}
+%   \end{center}
 
-\end{folhadeaprovacao}
+% \end{folhadeaprovacao}
 % ---
 
 % ---
@@ -250,8 +246,7 @@ Zootecnia, Universidade de São Paulo, São Paulo, 2011.
    \vspace*{\fill}
    \centering
    \noindent
-   \textit{Este trabalho é dedicado às crianças adultas que,\\
-   quando pequenas, sonharam em se tornar cientistas.} \vspace*{\fill}
+   \textit{A minha avó, Maria Daria Rocha.} \vspace*{\fill}
 \end{dedicatoria}
 % ---
 
@@ -269,11 +264,8 @@ Agradeço $\ldots$
 \begin{epigrafe}
     \vspace*{\fill}
         \begin{flushright}
-                \textit{``Não vos amoldeis às estruturas deste mundo, \\
-                mas transformai-vos pela renovação da mente, \\
-                a fim de distinguir qual é a vontade de Deus: \\
-                o que é bom, o que Lhe é agradável, o que é perfeito.\\
-                (Bíblia Sagrada, Romanos 12, 2)}
+                \textit{``RAAAWR //
+                          (Totoro)}
         \end{flushright}
 \end{epigrafe}
 % ---
@@ -284,15 +276,15 @@ Agradeço $\ldots$
 
 % resumo em português
 % remover se o documento for em inglês
-\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
-\begin{resumo}
-  Este documento é um modelo \LaTeX para servir como base para edição
-  de uma dissertação a ser apresentada ao programa de pós-graduação em
-  Computação Aplicada do Departartamento de Computação e Matemática da
-  FFCLRP/USP.
+% \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+% \begin{resumo}
+%   Este documento é um modelo \LaTeX para servir como base para edição
+%   de uma dissertação a ser apresentada ao programa de pós-graduação em
+%   Computação Aplicada do Departartamento de Computação e Matemática da
+%   FFCLRP/USP.
 
-\noindent \textbf{Palavras-chave}: latex. abntex. editoração de texto.
-\end{resumo}
+% \noindent \textbf{Palavras-chave}: latex. abntex. editoração de texto.
+% \end{resumo}
 
 % resumo em inglês
 \begin{resumo}[Abstract]
@@ -301,7 +293,7 @@ Agradeço $\ldots$
 
    \vspace{\onelineskip}
 
-   \noindent \textbf{Keywords}: latex. abntex. text editoration.
+   \noindent \textbf{Keywords}: iot. smart home. event driven. face recognition. smart scale.
 % \end{otherlanguage*}
 \end{resumo}
 
@@ -336,8 +328,7 @@ Agradeço $\ldots$
 % inserir lista de abreviaturas e siglas
 % ---
 \begin{siglas}
-  \item[ABNT] Associação Brasileira de Normas Técnicas
-  \item[abnTeX] ABsurdas Normas para TeX
+  \item[TODO] TODO
 \end{siglas}
 % ---
 
@@ -345,10 +336,7 @@ Agradeço $\ldots$
 % inserir lista de símbolos
 % ---
 \begin{simbolos}
-  \item[$ \Gamma $] Letra grega Gama
-  \item[$ \Lambda $] Lambda
-  \item[$ \zeta $] Letra grega minúscula zeta
-  \item[$ \in $] Pertence
+  \item[$ \Gamma $] TODO
 \end{simbolos}
 % ---
 
@@ -364,112 +352,59 @@ Agradeço $\ldots$
 % ----------------------------------------------------------
 \textual
 
-% ----------------------------------------------------------
-% Introdução (exemplo de capítulo sem numeração, mas presente no Sumário)
-% ----------------------------------------------------------
-\chapter*[Introdução]{Introdução} % capítulo não numerado, SEM asterisco
-\addcontentsline{toc}{chapter}{Introdução}
-% ----------------------------------------------------------
-
-\lipsum[1-5]
-
-\chapter{Referencial Teórico}
-
-\lipsum[2]
-
-% ---
-\section{Aliquam vestibulum}
-% ---
-
-\lipsum[8]
-
-\blindtext[8]
-
-\section{Videt Omnia}
-
-\lipsum[9-10]
-
-\subsection{Subseção}
-
-\lipsum[36-38]
-
-\blindtext[3]
-
-\subsubsection{SubSubseção}
-
-\lipsum[41-42]
-
-\blindtext[2]
+\chapter{Introduction} % capítulo não numerado, SEM asterisco
+\addcontentsline{toc}{chapter}{Introduction}
+\section{Theoretical Background}
+\section{The Smart Scale project as an architectural and technical Proof of Concept}
+\section{Objectives}
 
 
-\chapter{Desenvolvimento ou Metodologia}
+\chapter{Theoretical Background}
+\section{The Internet of Things and Smart Homes}
+\section{Smart Scales}
+\section{Communication of Things}
+% aqui talvez tenha que add depois DDD, Hexagonal, etc.
+\section{Related Work}
 
-\lipsum[16]
 
-\section{Quod Videt} % capítulo numerado, COM asterisco
+\chapter{Proof of Concept}
+\section{Project specification}
+\subsection{Functional Requirements}
+\subsection{Nonfunctional Requirements}
+\section{Project Design}
+\subsubsection{Infrastructure}
+ESP32 and equipment
+raspberry pi placeholded by laptop (docker)
+\subsubsection{System architecture}
+DDD and event driven
+\subsubsection{System communication}
+Data serialization
+\subsection{Design of the edge layer}
+\subsection{Design of the fog layer}
+\subsection{Design of the cloud/hub layer}
+\section{Smart Scale Face Recognition}
+\subsection{Method comparison}
+Euclidian distance X cosine \& neural net vs basic moment calculation
+\subsection{Handling Privacy}
+\section{Project Evaluation}
+\subsection{Processing Performance}
+\subsection{Usability Performance}
 
-\lipsum[3-4]
-
-\chapter{Resultados}
-
-\lipsum[100]
-
-\section{Lorem Ipsum}
-
-\lipsum[5-6]
-
-\section{Tabelas}
-
-Tabela é o conjunto de dados estatísticos, dispostos em determinada
-ordem de classificação, que expressam as variações qualitativas e
-quantitativas de um fenômeno. Sua finalidade básica é resumir ou
-sintetizar dados. A Tabela~\ref{tab:regime} mostra um exemplo.
-
-\begin{table}[h]
-\caption{Regime de trabalho e sexo dos professores MS-6 que estavam
-  exercendo suas atividades na FMUSP durante o período de 2001 a 2006.}
-\label{tab:regime}
-  \centering
-\begin{tabular}{l|c|c|c|c}\hline
- Sexo & RTP (12h) &  RTC (20h) & RDIDP (40h) & MS-6  Total \\\hline
-M     &  2        &  38       &  17         & 57          \\
-F    &  0        &   2       &   7         &  9          \\
-Total&  2        &   40      &   24        &  66         \\\hline
-\end{tabular}
-\end{table}
-
-\section{Figuras}
-
-A Figura~\ref{fig:cilindro}\index{cilindro} mostra o $\ldots$
-
-\begin{figure}[ht]
-  \caption{Cilindro.}
-  \centering
-  \includegraphics{cilindro}
-  \label{fig:cilindro}
-\end{figure}
-
-\section{Citações}
-
-O manual do \TeX~\citeonline[1]{knuth1986}\index{TeX} pode ser usado para
-aprendê-lo, e o livro do Lamport~\cite{lamport1994} para aprender o
-\LaTeX\index{LaTeX}, mas se quiser ir a fundo tem que ver como o \TeX
-quebra os parágrafos em linhas~\citeonline{knuth1981}.
-
-% ----------------------------------------------------------
-% Finaliza a parte no bookmark do PDF
-% para que se inicie o bookmark na raiz
-% e adiciona espaço de parte no Sumário
-% ----------------------------------------------------------
 \phantompart
 
 % ---
 % Conclusão
 % ---
-\chapter{Conclusão}
+\chapter{Conclusion}
+\section{Contributions}
+\section{Discussion}
+\section{Future work}
+\subsection{Beyond the PoC}
+\subsection{Applications to the Internet of Medical Things}
+\subsection{Applications to Husbandry}
 % ---
 
-\lipsum[31-33]
+
 
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS
@@ -507,18 +442,18 @@ quebra os parágrafos em linhas~\citeonline{knuth1981}.
 \chapter{Quisque libero justo}
 % ----------------------------------------------------------
 
-\lipsum[50]
+
 
 \vfill
 
 \pagebreak
 
-\lipsum[51]
+
 
 % ----------------------------------------------------------
 \chapter{Nullam elementum}
 % ----------------------------------------------------------
-\lipsum[55-57]
+
 
 \end{apendicesenv}
 % ---
@@ -532,13 +467,13 @@ quebra os parágrafos em linhas~\citeonline{knuth1981}.
 % ---
 \chapter{Morbi ultrices rutrum lorem.}
 % ---
-\lipsum[30]
+
 
 % ---
 \chapter{Fusce facilisis lacinia dui}
 % ---
 
-\lipsum[32]
+
 
 \end{anexosenv}
 
