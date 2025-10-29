@@ -108,56 +108,15 @@ english       % ultimo idioma eh o principal do documento
 % Folha de rosto
 % (o * indica que haverá a ficha bibliográfica)
 % ---
-\imprimirfolhaderosto
+% \imprimirfolhaderosto
 % ---
 
 %---
 % Imprime a folha de rosto em inglês (Opcional)
-% \coversheet{Title in english}
+\coversheet{An IoT Smart Scale Proof of Concept for Smart Homes}
 %---
 
-% ---
-% Inserir a ficha bibliografica
-% ---
 
-% Isto é um exemplo de Ficha Catalográfica, ou ``Dados internacionais de
-% catalogação-na-publicação''. Você pode utilizar este modelo como referência.
-% Porém, provavelmente a biblioteca da sua universidade lhe fornecerá um PDF
-% com a ficha catalográfica definitiva após a defesa do trabalho. Quando estiver
-% com o documento, salve-o como PDF no diretório do seu projeto e substitua todo
-% o conteúdo de implementação deste arquivo pelo comando abaixo:
-%
-% \begin{fichacatalografica}
-%     \includepdf{fig_ficha_catalografica.pdf}
-% \end{fichacatalografica}
-
-\begin{fichacatalografica}
-        \sffamily
-        \vspace*{\fill}					% Posição vertical
-        \begin{center}					% Minipage Centralizado
-        \fbox{\begin{minipage}[c][8cm]{13.5cm}		% Largura
-        \small
-        \imprimirautor
-        %Sobrenome, Nome do autor
-
-        \hspace{0.5cm} \imprimirtitulo.
-        \imprimirlocal, \imprimirdata.
-
-        \hspace{0.5cm} \thelastpage p. : il.; 30 cm.\\
-
-        \hspace{0.5cm}
-        \parbox[t]{\textwidth}{\imprimirtipotrabalho\ submitted to the
-          Faculdade de Filosofia, Ciências e Letras \\
-          de Ribeirão Preto da USP, as part of the requirements for obtaining a Bachelor's degree in Computer Science.
-
-        \hspace{0.5cm} \imprimirorientadorRotulo~\imprimirorientador\\
-
-        \hspace{0.5cm}
-                1. IoT. 2. Embedded Systems. 3. Event-driven Architecture.
-        \end{minipage}}}
-        \end{center}
-      \end{fichacatalografica}
-      \cleardoublepage
 % ---
 
 % ---
@@ -353,17 +312,18 @@ Agradeço $\ldots$
 \textual
 
 \chapter{Introduction} % capítulo não numerado, SEM asterisco
-\addcontentsline{toc}{chapter}{Introduction}
-\section{Theoretical Background}
-\section{The Smart Scale project as an architectural and technical Proof of Concept}
-\section{Objectives}
+\section{Background}
+\section{Objective}
+\section{Methodology}
+\section{Structure of this paper}
 
 
-\chapter{Theoretical Background}
-\section{The Internet of Things and Smart Homes}
+\chapter{Literature and state of the art review}
+\section{Internet of Things}
+\subsection{Communication of Things}
+\subsection{Privay in IoT}
+\section{Smart Homes}
 \section{Smart Scales}
-\section{Communication of Things}
-% aqui talvez tenha que add depois DDD, Hexagonal, etc.
 \section{Related Work}
 
 
