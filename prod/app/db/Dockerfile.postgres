@@ -2,7 +2,7 @@
 FROM postgres:15-alpine
 
 # Set environment variables for PostgreSQL
-ENV POSTGRES_DB=user_metrics_app
+ENV POSTGRES_DB=profile_measurements
 ENV POSTGRES_USER=app_user
 ENV POSTGRES_PASSWORD=app_password
 

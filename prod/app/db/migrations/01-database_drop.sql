@@ -2,21 +2,18 @@
 -- Execute in reverse order of creation to avoid foreign key constraint issues
 
 -- Drop triggers first
-DROP TRIGGER IF EXISTS update_app_user_updated_at ON app_user;
+DROP TRIGGER IF EXISTS update_profile_updated_at ON profile;
 
 -- Drop the trigger function
 DROP FUNCTION IF EXISTS update_updated_at_column();
 
 -- Drop indexes
-DROP INDEX IF EXISTS idx_user_metrics_user_date;
-DROP INDEX IF EXISTS idx_user_metrics_measured_at;
-DROP INDEX IF EXISTS idx_user_metrics_user_id;
-DROP INDEX IF EXISTS idx_app_user_active;
-DROP INDEX IF EXISTS idx_app_user_email;
+DROP INDEX IF EXISTS idx_profile_measurement_user_date;
+DROP INDEX IF EXISTS idx_profile_measurement_measured_at;
+DROP INDEX IF EXISTS idx_profile_measurement_user_id;
+DROP INDEX IF EXISTS idx_profile_active;
+DROP INDEX IF EXISTS idx_profile_email;
 
 -- Drop tables (child table first due to foreign key constraints)
-DROP TABLE IF EXISTS app_user_metrics;
-DROP TABLE IF EXISTS app_user;
-
--- Optional: Drop database (uncomment if needed)
--- DROP DATABASE IF EXISTS user_metrics_app;
+DROP TABLE IF EXISTS profile_measurement;
+DROP TABLE IF EXISTS profile;

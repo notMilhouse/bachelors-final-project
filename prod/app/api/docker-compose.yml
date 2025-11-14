@@ -6,13 +6,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: user_metrics_api
+    container_name: profile_measurements_api
     environment:
-      DATABASE_URL: jdbc:postgresql://user_metrics_postgres:5432/user_metrics_app
+      DATABASE_URL: jdbc:postgresql://profile_measurements_postgres:5432/profile_measurements_app
       DATABASE_USERNAME: ${DATABASE_USERNAME:-app_user}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-app_password}
-      REDIS_HOST: user_metrics_redis
-      REDIS_PORT: 6379
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: ${ENVIRONMENT:-development}
       JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_here}
@@ -23,7 +21,7 @@ services:
     volumes:
       - api_uploads:/app/uploads
     networks:
-      - user_metrics_default
+      - profile_measurements_default
     depends_on:
       - db_health_check
     restart: unless-stopped
@@ -34,13 +32,13 @@ services:
     command: |
       sh -c "
         echo 'Waiting for database...'
-        until pg_isready -h user_metrics_postgres -p 5432 -U app_user -d user_metrics_app; do
+        until pg_isready -h profile_measurements_postgres -p 5432 -U app_user -d profile_measurements_app; do
           sleep 3
         done
         echo 'Database is ready!'
       "
     networks:
-      - user_metrics_default
+      - profile_measurements_default
     depends_on:
       - external_services
 
@@ -49,14 +47,14 @@ services:
     container_name: external_services_ref
     command: "echo 'External services reference'"
     networks:
-      - user_metrics_default
+      - profile_measurements_default
 
 volumes:
   api_uploads:
     driver: local
-    name: user_metrics_api_uploads
+    name: profile_measurements_api_uploads
 
 networks:
-  user_metrics_default:
+  profile_measurements_default:
     external: true
-    name: user_metrics_default
+    name: profile_measurements_default

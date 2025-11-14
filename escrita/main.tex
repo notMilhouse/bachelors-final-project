@@ -32,6 +32,8 @@ english       % ultimo idioma eh o principal do documento
 \fi
 \fi
 
+\graphicspath{ {./images/} }
+
 %%%%%%%%%%%%%%%% VERSÃO DO DOCUMENTO: ORIGINAL OU CORRIGIDA
 % Após as correções sugeridas pela banca serem efetuadas, retire os comentários
 % da próxima linha.
@@ -205,7 +207,7 @@ english       % ultimo idioma eh o principal do documento
    \vspace*{\fill}
    \centering
    \noindent
-   \textit{A minha avó, Maria Daria Rocha.} \vspace*{\fill}
+   \textit{A minha avó, Maria Daria Rocha, e ao Gabriel de 10 anos que desenhava ideias e projetos em papel manteiga.} \vspace*{\fill}
 \end{dedicatoria}
 % ---
 
@@ -223,8 +225,8 @@ Agradeço $\ldots$
 \begin{epigrafe}
     \vspace*{\fill}
         \begin{flushright}
-                \textit{``RAAAWR //
-                          (Totoro)}
+                \textit{``E ao vencedor, as batatas `` \\
+                          (Quincas Borba)}
         \end{flushright}
 \end{epigrafe}
 % ---
@@ -313,42 +315,230 @@ Agradeço $\ldots$
 
 \chapter{Introduction} % capítulo não numerado, SEM asterisco
 \section{Background}
+
+The history of the Internet is a story of continuous expansion and integration. Starting in the late 1960s with ARPANET, a network for government and academic use, it was a tool for sharing information across an enclosed group of institutions and people. The adoption of the TCP/IP protocol in the early 1980s and the birth of the World Wide Web in the 1990s democratized this connectivity, paving the way to a modern digital world. Moreover, with the rise of affordable sensors, ubiquitous wireless technologies like Wi-Fi and 5G, and the vast processing power of cloud computing, the Internet's reach extended beyond traditional computers to encompass everyday objects. This transformation allowed devices to collect, share, and act on data autonomously, laying the groundwork for a ``network of things", or Internet of Things (IoT).  
+
+Internet-connected things include thermostats that can be controlled remotely from smartphones and smart body scales that allow one to graphically review the progress of diets using smartphones, for example. Moreover, smart scales detect gradual weight changes and, when integrated with smart home systems, create comprehensive health monitoring environments. This continuous data stream allows healthcare providers to intervene earlier and more precisely, potentially reducing hospital admissions and healthcare costs.
+
+However, despite the increasing interest in IoT, the development of cost-effective IoT solutions currently face many different challenges. For instance, privacy features in many existing IoT development frameworks are relatively limited \cite{jin2020privacy}, which affects, for example, smart scale solutions reliability. Besides that, handling IoT sensor data, especially in terms of processing and integration with other data sources, has its own setbacks \cite{challenges2024nwamaka}. Likewise, there is no ground truth for project design and architecture, which raises the question of which service composition mechanism best fulfills the functional scalability requirements of IoT systems \cite{evaluation2020kung}. On top of that, buying a scale can be financially challenging, particularly for low-income individuals, and scales with advanced features cost significantly more than scales without these features \cite{affordability2021park}.
+
 \section{Objective}
+
+Within this context, this project aims to deliver a working prototype of a smart scale with face recognition capability. Therefore, it consists of an embedded system for weighing a subject and capturing their face image, a web service for managing weight records and performing face recognition, and a dashboard for data visualization. 
+
+The development of the Proof-of-Concept (PoC) system takes into account cost and privacy concerns, as well as integration with legacy systems and scalability, considering different possible architecture styles \cite{dimartino2018iot}.
+
+The PoC implementation explores and validates different aspects of such a system and their specific challenges following novel approaches from literature.
+
 \section{Methodology}
+%TODOs 
+% - add link to github
+% - add images of strain gauges, load cells and a diagram for the wheatstone bridge
+
+In order to achieve the final system, a set plan was followed. Overrall the system consists of three layers: the edge, the fog, and the cloud or application layer.
+
+The edge layer consists of a scale, an HX711 signal amplifier and an ESP32.
+
+The scale itself consists of a Wheatstone bridge built with straing gauge load cells, connected using standard copper wires. The load cells are then connected to an HX711 signal amplifier that is then connected to an ESP32.
+
+The ESP32 is callibrated using a known weight object and programmed to poll variations in voltage cause by deformation of the strain gauges when a weight is placed on top of them. The ESP32 module comes with a camera that captures image once a given weight threshold is beated.
+
+Both image and weight value are sent to an MQTT broker that can be set up in a RaspberryPi. For the purpose of this PoC, the broker was set up in a personal computer. 
+
+The fog layer and the application layer were implemented in the same PC for this PoC, however the fog layer could be moved into a RaspberryPi for example.
+
+The fog layer consists of the MQTT broker, a worker for uploading profiled weight measurements and a face recognition service. Profiled measurements represent weight measurements that could be matched to a registered face in the system. Nevertheless, the application layer includes an API for managing records in the database and also a dashboard interface for visualizing available measurements by profile.
+
 \section{Structure of this paper}
 
+The following chapters explore in more depth the various aspects of this project: Chapter 2 reviews literature and related work; Chapter 3 details the PoC development; and Chapter 4 brings to light the findings of this project.
 
-\chapter{Literature and state of the art review}
+\chapter{Theoretical Foundation}
 \section{Internet of Things}
+
+The Internet of Things (IoT) can be defined as ``An open and comprehensive network of intelligent objects that have the capacity to auto–organize, share information, data and resources, react and act in situations faced and changes in the environment" \cite{somayya2015smart}. IoT consists of an inter-network of physical devices like vehicles, buildings, and other items embedded with electronics, sensors, actuators, software, and network connectivity that allow these objects to collect and exchange data \cite{mehra2019home}. 
+
 \subsection{Communication of Things}
-\subsection{Privay in IoT}
-\section{Smart Homes}
-\section{Smart Scales}
+
+Naturally, communication is a key layer upon which any IoT solution is built and it involves a careful consideration of both the physical infrastructure and the logical architecture. At the physical layer, devices need to communicate wirelessly, and the choice of technology depends heavily on the specific application's requirements for bandwidth, range, and power consumption. For example, Wi-Fi is a common choice for many smart home devices due to its high bandwidth, which is essential for data-intensive tasks like streaming video from a security camera, and its widespread availability. However, Wi-Fi is also relatively power-intensive, which is a major drawback for battery-operated devices that need to run for months or years without a charge. 
+
+In contrast, Bluetooth, and its more energy-efficient variant, Bluetooth Low Energy \cite{bluetooth}, is optimized for low-power, short-range communication, making it an ideal choice for wearable devices, fitness trackers, and other battery-powered sensors. Still, other emerging technologies such as LoRa \cite{lora}, which is specifically designed for long-range, low-power communication, are more suited for applications in smart cities or large-scale industrial IoT, as highlighted by Kane et al. \cite{kane2022lora}. 
+
+This smart scale prototype should weight these options considering their range and bandwidth to handle both weight data and camera images, while acknowledging the power trade-offs.
+
+Beyond the physical layer, the logical architecture of communication is crucial to ensuring scalability, efficiency, and responsiveness in a heterogeneous IoT environment. The traditional request-response model, often implemented via HTTP/REST API calls, is a synchronous pattern in which a client sends a request to a server and waits for a response. This model is well-suited for many web applications but can be inefficient in an IoT context where devices may be intermittently connected and need to send data proactively rather than waiting for a request. A more robust and scalable solution for IoT is an event-driven architecture (EDA). In this paradigm, devices and services operate asynchronously, communicating through the publication and subscription of ``events." For example, when a user steps on the scale, the embedded system publishes a ``weight-measured" event to a central message broker. Other services, such as a data processing worker or the face recognition service, that are interested in this event are automatically notified.
+
+This publish-subscribe model, which is often facilitated by a lightweight messaging protocol such as Message Queuing Telemetry Transport \cite{mqtt}, is highly advantageous for IoT systems. MQTT is designed for resource-constrained devices and low-bandwidth, high-latency networks, making it an ideal fit for the project. An EDA allows for loose coupling between components, meaning a new device or service can be added to the system without requiring changes to existing components. This modularity is a key factor for scalability and adaptability. In addition, it enables adaptive, context-aware data acquisition strategies. 
+
+In a system with low-frequency sensor data (weight) and high-latency operations (image processing for facial recognition), an event-driven model can optimize bandwidth and energy consumption. The system can be configured to only publish data when a significant change occurs (e.g., a weight measurement crosses a certain threshold) or when a specific condition is met, avoiding the need for continuous, wasteful polling. This adaptive approach is central to the proposed system's design, aiming to improve responsiveness and reduce resource consumption in a real-world smart home environment.
+
+
+\subsection{Privacy in IoT}
+
+The explosive growth of the Internet of Things, particularly within the intimate setting of the smart home, has introduced a new and complex set of privacy and security challenges. Unlike traditional computing devices, IoT devices (also referred to as Smart Things) are often embedded into everyday objects, collecting vast amounts of granular, and often highly sensitive, personal data without the user's continuous, conscious interaction. This data can range from health metrics and daily routines to audio and video recordings captured by devices like smart speakers and cameras. The collection, transmission, and storage of this sensitive information create a vast surface area for potential security vulnerabilities and privacy breaches.
+
+A central issue is the lack of privacy-by-design principles in many commercially available IoT devices and their corresponding development frameworks. This can lead to a host of security weaknesses, including weak authentication mechanisms, the transmission of unencrypted data, and an absence of user controls for managing personal information. The decentralized and heterogeneous nature of IoT ecosystems further complicates matters. A smart home can consist of devices from multiple manufacturers, each with its own security standards and data handling policies, making it difficult for a user to have a complete understanding and control over their data.
+
+The use of biometric data, such as facial recognition in the context of the proposed Proof-of-Concept (PoC) smart scale, introduces a particularly acute privacy risk. If a biometric database is compromised, the user's identity is permanently at risk. This is a critical area that requires advanced security solutions. The work of Elordi et al. \cite{elordi2021optimal} offers a compelling example of how to address this challenge. They propose a system that uses homomorphic encryption to protect this sort of data securely for elderly care applications. Homomorphic encryption allows computations to be performed on encrypted data without the need to decrypt it first. In the context of facial recognition, this means that the face matching process can occur on a server without the server ever having access to the unencrypted biometric template. This approach provides a powerful layer of privacy protection, as even if a database were to be breached, the data would remain encrypted. This PoC should build upon this by exploring secure data handling for facial recognition within a cost-conscious, smart home-oriented architecture, aiming to demonstrate how such advanced privacy measures can be integrated into a practical PoC.
+
+% TODO approach DDD, Hexagonal, encryption methods
+
 \section{Related Work}
+\subsection{Smart Homes}
 
+A smart home system forms when interconnected devices, embedded with electronics, sensors, software, and network connectivity, work within a household. Mocrii et al \cite{mocrii2018sys}. define this system as having complementary user and system functions built upon a general IoT-based architecture. The devices themselves, often referred to as 'Smart Things,' possess embedded intelligence, identification, and automation capabilities designed to assist human life. The collection, transmission, and storage of granular, sensitive personal data by these devices, often without continuous user interaction, creates a vast surface area for potential privacy breaches.
 
-\chapter{Proof of Concept}
+Seo et al. \cite{seo_hepa_2015} proposed the Hexagonal Platform Architecture (HePA) as a reference architecture specifically designed for the complex, interconnected nature of the IoT era, including smart homes. Their implementation was a platform architecture model that aimed for extreme scalability while maintaining required performance. The article acknowledges the primary challenge as the advent of the complex IoT era, where all devices are interconnected, requiring enormous amounts of interaction.
+
+Jin et al. \cite{jin_providing_2020} proposed the Peekaboo framework to provide architectural support for building privacy-sensitive smart home applications following homomorphic encryption of sensitive data. Their implementation philosophy moves pre-processing tasks (e.g., face detection) from the cloud onto a user-controlled hub. They achieved this by extracting image embeddings before sending data to the cloud. The authors primarily addressed the challenge of reducing data egress and minimizing potential privacy risks by preventing raw data from leaving the user's control. 
+
+Khazbak et al. \cite{khazbak_targetfinder_2020} designed TargetFinder, a system that finds targets using crowdsourced IoT camera videos while preserving privacy. Their implementation achieved privacy preservation by exploiting homomorphic encryption techniques, which allows a system to search for the target using encrypted information. The system also includes techniques to ensure the requester receives only images containing the target, thereby protecting bystanders' images. The authors faced the major challenge of high computation overhead from the cryptographic primitives, which required them to develop optimization techniques to run the protocol efficiently on mobile devices.
+
+\subsection{Smart Scales}
+
+The evolution of personal weighing devices from mechanical to electronic allow for better precision, ease of use and extra functionalities. The foundational technology of a modern electronic scale is a load cell, a transducer that converts mechanical force into an electrical signal. When an individual stands on the scale, a strain gauge undergoes a slight deformation. This deformation alters the electrical resistance of the gauge in a measurable way. An analog-to-digital converter processes this change, translating it into a precise digital weight value for display. While this technology significantly improved accuracy and usability over mechanical scales, its utility was confined to providing a single, instantaneous weight measurement.
+
+The smart scale expands upon this foundation by integrating additional sensors and a communication module. These supplementary means provide a way to reshape the usage of a scale, or even add new functionality to it.
+
+The connectivity of smart scales, typically through wireless protocols such as Bluetooth or Wi-Fi, is what defines their ``smart'' functionality. This capability facilitates the automatic and seamless transmission of collected data to a companion application or cloud-based service. This automated data flow eliminates the need for manual record-keeping, thereby supporting long-term, continuous health tracking. The compiled data can be visualized and analyzed over time, which supports a shift from reactive to preventive healthcare. 
+
+However, the adoption of this technology faces challenges. Research by Mafong et al. \cite{mafong2020willing} indicates that while there is a general willingness to use smart scales, affordability remains a significant barrier for many consumers. The study found that a notable portion of potential users were unwilling or unable to purchase such a device, highlighting the need for cost-conscious development.
+
+Hasti et al. \cite{hasti_development_2025} developed an IoT-based digital weighing scale prototype to address the growing health concern of obesity. Their implementation utilized load cell sensors, an HX711 amplifier, and an ESP8266 microcontroller for weight measurement. A companion Flutter-based application (MyWeightApp) connected to Firebase provided data storage, visualization, and real-time tracking of BMI calculation. The primary implementation challenge involved ensuring hardware accuracy; however, the authors' testing demonstrated a low 0.78 percent error rate, well within the tolerance threshold.
+
+Jaiteh et al. \cite{jaiteh_smart_2019} designed a multipurpose smart tracking system that functions as both a weighing scale and a human tracking system using gait analysis. The implementation featured a sensing platform built with eight load cells and an amplifier, which fed analog signals to an Arduino microprocessor for data processing, analysis, and representation. The authors powered the system with either a 9V battery or solar energy, indicating a focus on power efficiency and standalone operation. Their implementation focused on calibrating the load cells and testing the sensing platform's precision and accuracy against various static weights and different individuals.
+
+Zargham et al. \cite{zargham_revolutionizing_2023} introduced an Intelligent IoT-based Scale to automate the sales process for fruits and vegetables in small-scale retail. The implementation used a load cell with an HX711 amplifier for accurate weighing and integrated advanced computer vision using fine-tuned YOLOv5n and YOLOv7 models for item detection and identification. A Python script handled the pricing logic, and the authors developed a Graphical User Interface (GUI) for customer display and bill generation. The main implementation challenge mentioned was achieving high accuracy and efficacy in real-time processing. Still, their models achieved high mean Average Precision (mAP) scores (0.98 and 0.987) and high processing speeds.
+
+\chapter{The Proof of Concept (PoC)}
+
+In summary, this PoC consists of an embedded system with integrated sensors capable of weighing and identifying a subject alongside complementary services for face recognition and data storage. It also offers a simple dashboard interface for managing subject registration (referred as profiles) and visualizing available weight measurements of them realized with the sensor mentioned.
+
+This section unfolds the details of designing and implementing the whole system and presents the decision process for every step and piece of it.
+
 \section{Project specification}
 \subsection{Functional Requirements}
+
+First and foremost, the functional requirements (FRs) for the system define what it does from certain actor perspectices, and they are:
+
+\begin{enumerate}
+  \item The user shall be able to create profiles through a frontend client
+  \begin{enumerate}
+    \item When creating a profile the user shall be able to name the profile
+    \item When creating a profile the user shall be able to send a picture to be used for face recognition of the subject related to that profile
+  \end{enumerate}
+  \item The user shall be able to access the available profiles and their available measurements
+  \item The user shall be able to measure their weight by stepping up on the scale
+  \begin{enumerate}
+    \item When stepping up on the scale the system should then use its camera to match the subject
+  \end{enumerate}
+\end{enumerate}
+
 \subsection{Nonfunctional Requirements}
-\section{Project Design}
-\subsubsection{Infrastructure}
-ESP32 and equipment
-raspberry pi placeholded by laptop (docker)
-\subsubsection{System architecture}
-DDD and event driven
-\subsubsection{System communication}
-Data serialization
+
+Nevertheless, Nonfunctional Requirements (NFRs) layout the qualities of a system, or \textit{how} it should perform its functionalities. For this PoC, the following NFR were set:
+
+\begin{enumerate}
+  \item The weight measurement must be accurate within an 100 grams margin of error;
+  \item The system shall account for measurement or face matching errors and support retry policies;
+  \item The system must be easily extensible to consider the possible adition of extra sensors and connection to outside systems;
+  \item Privacy is paramount and sensitive data such as biometric data shall never be saved in its raw format.
+\end{enumerate}
+
+\section{Project design}
+
+In order to accomodate the FRs and NFRs, many engineering decisions were made based on literature review and good practices in software engineering and architecture.
+
+\subsubsection{System architecture and communication}
+
+The PoC has many architectural levels as shown in figure \ref{fig:layers}\index{layers}, each one with its own organization. An overview of it is shown in figure \ref{fig:layers_detailed}\index{layers_detailed}.
+
+\begin{figure}[ht]
+  \caption{Conventional IoT System Layers.}
+  \centering
+  \includegraphics[scale=0.2]{layers}
+  \label{fig:layers}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Overview of the PoC system components.}
+  \centering
+  \includegraphics[scale=0.2]{layers_detailed}
+  \label{fig:layers_detailed}
+\end{figure}
+
 \subsection{Design of the edge layer}
+
+The project is split into three layers. The \textbf{edge layer} contains the embedded solution with a weight sensor and a a camera attatched to it. The solution was developed using an ESP32 microcontroller embedded with a 2 megapixel camera (ESPCAM), alognside an HX711 signal enhancement chip. The weight sensor consists of a Wheatstone Bridge constructed with four strain gauges.
+
+The ESP32 collects voltage variation to infer weight values based on callibrated reference values. Once a threshold is perceived, the camera is activated and an image is taken of the subject being weighed. Both weight and image information are sent to an MQTT broker that belongs to the next layer, the \textbf{fog layer}.
+
 \subsection{Design of the fog layer}
-\subsection{Design of the cloud/hub layer}
+
+The \textbf{fog layer} consists of the intermediate services and tools for the system to work, however it still remains within the household domain. This means information here is still private to the local network (LAN). This layer can be deployed to a RaspberryPi, for example, to serve as an IoT Hub for smart things in the house.
+
+For the sake of this PoC however, the RaspberryPi was replaced by docker containers run in a PC to represent it.
+
+Within this project, this layer contains an \textbf{MQTT Broker}, a \textbf{face recognition service} and a \textbf{worker service}.
+
+The MQTT broker serves as a queue service for bridging the edge layer to its required services. The \textbf{face recognition service} extracts a feature vector from the image (also referred as image embeddings) and queries for it in the database using an API, which belongs to the next layer, the \textbf{cloud or application layer}. Figure \ref{fig:happy_flow}\index{happy_flow} shows this process.
+
+Once the measurement is matched to a profile in the database, the \textbf{worker service} is able to upload it to the database through the same API used by the \textbf{face recognition service}. This is shown in Figure Figure \ref{fig:final_flow}\index{final_flow}. If the image does not match any registed profile, then the ESP32 is notified through the inclusion of an error message in the MQTT broker as shown in \ref{fig:sad_flow}\index{sad_flow}.
+
+\begin{figure}[ht]
+  \caption{Happy Flow of the System.}
+  \centering
+  \includegraphics[scale=0.2]{happy_flow}
+  \label{fig:happy_flow}
+\end{happy_flow}
+
+\begin{figure}[ht]
+  \caption{Final step on the Happy Flow.}
+  \centering
+  \includegraphics[scale=0.2]{final_flow}
+  \label{fig:final_flow}
+\end{final_flow}
+
+\begin{figure}[ht]
+  \caption{Error flow for profile matching issues.}
+  \centering
+  \includegraphics[scale=0.2]{sad_flow}
+  \label{fig:sad_flow}
+\end{sad_flow}
+
+This workflow follows and Event-Driven Architecture (EDA) and is made possible through the definition of topics within the MQTT broker. The \ref{fig:event_flow}\index{event_flow} shows the event flow for this subsystem of the PoC. Each event is always sent to its own topic, and services subscribe and publish to their topics of concern as shown in \ref{fig:mqtt_topics}\index{mqtt_topics}. 
+
+\begin{figure}[ht]
+  \caption{Event Flow}
+  \centering
+  \includegraphics[scale=0.1]{event_flow}
+  \label{fig:event_flow}
+\end{event_flow}
+
+\begin{figure}[ht]
+  \caption{MQTT Topics Schema}
+  \centering
+  \includegraphics[scale=0.05]{mqtt_topics}
+  \label{fig:mqtt_topics}
+\end{mqtt_topics}
+
+\subsection{Design of the cloud layer}
+
+The \textbf{cloud layer} consists of a PostgreSQL database for storing profiles and their measurements, an API for managing those records and allowing for applications to rise and use the available data. For this PoC, an example application is set in the form of a dashboard, for managing profiles and visualizing the measured weights for them.
+
 \section{Smart Scale Face Recognition}
-\subsection{Method comparison}
-Euclidian distance X cosine \& neural net vs basic moment calculation
-\subsection{Handling Privacy}
+
+The Face Recognition aspect of the system has its complexities of its own. Specially, the set privacy concerns required novel solutions. The images used for profile matching are never stored in order to keep privacy untouched.
+
+The project uses an homomorphic encryption approach in which the feature vector of the system is used to represent it. This method allows for searching and comparison of images without the raw data.
+
+This is made possible through the usage of the pgvector plugin within the PostgreSQL database used. It allows for storage and query of vector, which eases the process of matching profiles to weighing subjects.
+
+Therefore, both during the registration of a profile and the taking of an image by the ESP32, the image embeddings are taken and used in place of the raw image data. This way biometric information is never stored, and is not kept in the \textbf{cloud layer}.
+
 \section{Project Evaluation}
-\subsection{Processing Performance}
-\subsection{Usability Performance}
+\subsection{Functionality performance}
+\subsection{Application of reference solutions}
 
 \phantompart
 
@@ -359,13 +549,10 @@ Euclidian distance X cosine \& neural net vs basic moment calculation
 \section{Contributions}
 \section{Discussion}
 \section{Future work}
-\subsection{Beyond the PoC}
-\subsection{Applications to the Internet of Medical Things}
-\subsection{Applications to Husbandry}
+mention use of 512 bytes method for face recon
+Applications to the Internet of Medical Things
+Applications to Husbandry
 % ---
-
-
-
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS
 % ----------------------------------------------------------
@@ -375,67 +562,8 @@ Euclidian distance X cosine \& neural net vs basic moment calculation
 % ----------------------------------------------------------
 
 % ------
-\bibliography{refs}
+\bibliography{refs.bib}
 % ------
-
-% ----------------------------------------------------------
-% Glossário
-% ----------------------------------------------------------
-%
-% Consulte o manual da classe abntex2 para orientações sobre o glossário.
-%
-%\glossary
-
-% ----------------------------------------------------------
-% Apêndices
-% ----------------------------------------------------------
-
-% ---
-% Inicia os apêndices
-% ---
-\begin{apendicesenv}
-
-% Imprime uma página indicando o início dos apêndices
-\partapendices
-
-% ----------------------------------------------------------
-\chapter{Quisque libero justo}
-% ----------------------------------------------------------
-
-
-
-\vfill
-
-\pagebreak
-
-
-
-% ----------------------------------------------------------
-\chapter{Nullam elementum}
-% ----------------------------------------------------------
-
-
-\end{apendicesenv}
-% ---
-
-% --% ---
-\begin{anexosenv}
-
-% Imprime uma página indicando o início dos anexos
-\partanexos
-
-% ---
-\chapter{Morbi ultrices rutrum lorem.}
-% ---
-
-
-% ---
-\chapter{Fusce facilisis lacinia dui}
-% ---
-
-
-
-\end{anexosenv}
 
 %---------------------------------------------------------------------
 % INDICE REMISSIVO

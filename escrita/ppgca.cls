@@ -489,11 +489,7 @@
 \def\@ENdescription{
   \@ENdocumenttype~presented to \@faculty~(FFCLRP) from
   the \@institution~(USP),
-  as part of the requirements to hold the Master of
-  Science degree.\par
-
-  \vspace{.7cm}
-  Field of Study: Applied Computing.\par
+  as part of the requirements to hold the Bachelor in Computer Science degree.\par
 
   \vspace{.5cm}
   \supervisor
@@ -596,11 +592,7 @@
         \normalsize
         \@ENdocumenttype~presented to \@faculty~(FFCLRP) from
         the \@institution~(USP),
-        as part of the requirements to hold the Master of
-        Science degree.\par
-
-        \vspace{.7cm}
-        Field of Study: Applied Computing.\par
+        as part of the requirements to hold the Bachelor in Computer Science degree.\par
 
         \vspace{.5cm}
         \@ENsupervisorlabel: \imprimirorientador
