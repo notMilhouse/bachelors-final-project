@@ -42,5 +42,5 @@ class ProfileEntity(
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
-    open var updatedAt: Timestamp? = null
+    open var updatedAt: Timestamp = Timestamp(System.currentTimeMillis())
 }

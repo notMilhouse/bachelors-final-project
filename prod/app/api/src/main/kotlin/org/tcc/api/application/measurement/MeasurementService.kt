@@ -53,7 +53,7 @@ class MeasurementService(
     }
 
 
-    fun deleteMeasurement(id: UUID): Boolean {
+    fun deleteById(id: UUID): Boolean {
         return measurementRepository.deleteById(id)
     }
 

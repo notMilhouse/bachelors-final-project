@@ -10,7 +10,7 @@ import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.ColumnDefault
 import java.math.BigDecimal
-import java.time.OffsetDateTime
+import java.sql.Timestamp
 import java.util.UUID
 
 @Entity
@@ -33,16 +33,16 @@ class MeasurementEntity(
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "measured_at")
-    open var measuredAt: OffsetDateTime? = null
+    open var measuredAt: Timestamp = Timestamp(System.currentTimeMillis())
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "recorded_at")
-    open var recordedAt: OffsetDateTime? = null
+    open var recordedAt: Timestamp = Timestamp(System.currentTimeMillis())
 
     @Column(name = "notes", length = Integer.MAX_VALUE)
-    open var notes: String? = null
+    open var notes: String = ""
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    open var createdAt: OffsetDateTime? = null
+    open var createdAt: Timestamp = Timestamp(System.currentTimeMillis())
 }
