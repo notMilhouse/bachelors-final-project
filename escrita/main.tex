@@ -367,12 +367,12 @@ Sensors can be of many kinds and for many purposes. Temperature, umidity and pro
 
 \section{IoT System Architectural Styles}
 
-Figure \ref{fig:mocrii} shows a simplification of an IoT architecture focused on cloud solutions. The cloud computing approach offers high processing power and storage option, while edge computing is more limited when it comes to computing power. However, edge computing achieves privacy measures more easily than the cloud. Nevertheless, fog computing is another approach that takes processing power closer to embedded devices on the edge, while still keeping the cloud layer unware of sensitive information \cite{mocrii2018sys}. Therefore, depending on the goals for a project, the placement of system components and tasks should be placed accordingly to what every computing layer offers and limits.
+Figure \ref{fig:mocrii}\index{mocrii} shows a simplification of an IoT architecture focused on cloud solutions. The cloud computing approach offers high processing power and storage option, while edge computing is more limited when it comes to computing power. However, edge computing achieves privacy measures more easily than the cloud. Nevertheless, fog computing is another approach that takes processing power closer to embedded devices on the edge, while still keeping the cloud layer unware of sensitive information \cite{mocrii2018sys}. Therefore, depending on the goals for a project, the placement of system components and tasks should be placed accordingly to what every computing layer offers and limits.
 
 \begin{figure}[ht]
   \caption{Cloud-based architecture of a smart home. (Screenshot from \cite[Fig.~1]{mocrii2018sys})}
   \centering
-  \includegraphics[scale=0.2]{mocrii}
+  \includegraphics[scale=0.3]{mocrii}
   \label{fig:mocrii}
 \end{figure}
 
@@ -394,7 +394,7 @@ The smart scale expands upon this foundation by integrating additional sensors a
 
 The connectivity of smart scales, typically through wireless protocols such as Bluetooth or Wi-Fi, is what defines their ``smart`` functionality. This capability facilitates the automatic and seamless transmission of collected data to a companion application or cloud-based service. This automated data flow eliminates the need for manual record-keeping, thereby supporting long-term, continuous health tracking. The compiled data can be visualized and analyzed over time, which supports a shift from reactive to preventive healthcare. 
 
-The adoption of Smart Scales provide a number of benefits, such as easiest health tracking my health professionals and integration with other smart gadgets \cite{panja2025medical}. However, the adoption of this technology faces challenges. Research by Mafong \textit{et al}. \cite{mafong2020willing} indicates that while there is a general willingness to use smart scales, affordability remains a significant barrier for many consumers. The study found that a notable portion of potential users were unwilling or unable to purchase such a device, highlighting the need for cost-conscious development.
+The adoption of Smart Scales provide a number of benefits, such as easiest health tracking by health professionals and integration with other smart gadgets \cite{panja2025medical}. However, the adoption of this technology faces challenges. Research by Mafong \textit{et al}. \cite{mafong2020willing} indicates that while there is a general willingness to use smart scales, affordability remains a significant barrier for many consumers. The study found that a notable portion of potential users were unwilling or unable to purchase such a device, highlighting the need for cost-conscious development.
 
 Hasti \textit{et al}. \cite{hasti_development_2025} developed an IoT-based digital weighing scale prototype to address the growing health concern of obesity. Their implementation utilized load cell sensors, an HX711 amplifier, and an ESP8266 microcontroller for weight measurement. A companion Flutter-based application (MyWeightApp) connected to Firebase provided data storage, visualization, and real-time tracking of Body Mass Index (BMI) calculation. The primary implementation challenge involved ensuring hardware accuracy; however, the authors' testing demonstrated a low 0.78 percent error rate, well within the tolerance threshold.
 
@@ -426,12 +426,12 @@ The calibration is done through the polynomial regression of the acquired ADC (v
 
 Both image feature vector and weight value are sent to an MQTT broker, which serves as a queue service. For the purpose of this PoC, the broker was set up in a personal computer and executed under a \textbf{docker container} for abstraction, but it could be deployed to a RaspberryPi or even another ESP32 for its lightweight nature. 
 
-The fog layer consists of the MQTT broker which acts as the gateway between the embedded system and its gathered data users (cloud layer services). Nevertheless, the cloud layer includes both a Hub Service for managing measurements in the database and a dashboard for visualizing available measurements by profile as shown in \ref{fig:dashboard}.
+The fog layer consists of the MQTT broker which acts as the gateway between the embedded system and its gathered data users (cloud layer services). Nevertheless, the cloud layer includes both a Hub Service for managing measurements in the database and a dashboard for visualizing available measurements by profile as shown in \ref{fig:dashboard}\index{dashboard}.
 
 \begin{figure}[ht]
   \caption{Dashboard overview}
   \centering
-  \includegraphics[scale=0.2]{dashboard}
+  \includegraphics[scale=0.3]{dashboard}
   \label{fig:dashboard}
 \end{figure}
 
@@ -468,13 +468,13 @@ In order to accomodate the FRs and NFRs, many engineering decisions were made ba
 \begin{figure}[ht]
   \caption{System overview and communication routes}
   \centering
-  \includegraphics[scale=0.5]{overview}
+  \includegraphics[scale=0.2]{overview}
   \label{fig:overview}
 \end{figure}
 
 \section{PoC edge layer}
 
-The \textbf{edge layer} contains the embedded solution with a weight sensor and a camera attatched to it. The solution was developed using an ESP32 microcontroller embedded with a 2 megapixel camera (ESPCAM), alongisde an HX711 signal amplifier chip. The weight sensor consists of a Wheatstone Bridge constructed with four strain gauges. Figure \ref{fig:wheatstone} shows how the Wheatstone bridge is created, the resulting system allows for measurement of up to 200Kg of weight. Figure \ref{fig:scalepic} shows the actual load cell layout in the PoC.
+The \textbf{edge layer} contains the embedded solution with a weight sensor and a camera attatched to it. The solution was developed using an ESP32 microcontroller embedded with a 2 megapixel camera (ESPCAM), alongisde an HX711 signal amplifier chip. The weight sensor consists of a Wheatstone Bridge constructed with four strain gauges. Figure \ref{fig:wheatstone}\index{wheatstone} shows how the Wheatstone bridge is created, the resulting system allows for measurement of up to 200Kg of weight. Figure \ref{fig:physical}\index{physical} shows the actual load cell layout in the PoC.
 
 TODO add image here for the conceptual wheatstone
 TODO take picture and add image here for actual load cell layout
@@ -486,44 +486,98 @@ The callibration of the system was made through the measurement of voltage for k
 TODO add table here with the values
 TODO add image here with the resulting graph
 
-Once the weight beats a given threshold of 5 grams the scale is set to retire from its idle state and take a picture of the subject on it. The microcontroller makes use of the pre-trained MobileFaceNet model from TensorFlow Lite library to extract the feature vector from the image. By doing so, the subject image never leaves the \textbf(edge layer) and thus their privacy is protected by avoiding the transmission of possible sensitive biometric data to the \textbf{cloud layer}. Still, this feature vector is enough to query registered profiles in the database and follows the homomorphic encryption approach \cite{jin_providing_2020}.
+Once the weight beats a given threshold of 5 grams the scale is set to retire from its idle state and take a picture of the subject on it. The microcontroller makes use of the pre-trained MobileFaceNet model from TensorFlow Lite library to extract the feature vector from the image. By doing so, the subject image never leaves the \textbf(edge layer) and thus their privacy is protected by avoiding the transmission of possible sensitive biometric data to the \textbf{cloud layer}. Still, this feature vector is enough to query registered profiles in the database and follows the homomorphic encryption approach \cite{jin_providing_2020}. Figure \ref{fig:stateesp}\index{stateesp} shows the state machine representation of the ESP32 microcontroller workflow. While on an idle state, a disruption of the weight on the scale wakes it up to start the measuring process explained before.
+
+\begin{figure}[ht]
+  \caption{State Machine Diagram of the ESP32 workflow}
+  \centering
+  \includegraphics[scale=0.2]{stateesp}
+  \label{fig:stateesp}
+\end{figure}
 
 TODO add image of the espcam face recon feature for representation of what happens
 
 \section{PoC fog layer}
 
-The \textbf{fog layer} consists of the intermediate services and tools for the system to work, however it still remains within the household domain. This means information here is still private to the local network (LAN). This layer can be deployed to a RaspberryPi, for example, to serve as an IoT Hub for smart things in the house.
+The \textbf{fog layer} consists of the intermediate services and tools for the system to work, however it still remains within the household domain. This means information here is still private to the local network (LAN). This layer can be deployed to serve as an IoT Hub for smart things in the house to communicate between themselves.
 
-Within this project, this layer contains an \textbf{MQTT Broker}, a \textbf{face recognition service} and a \textbf{worker service}.
+Within this project, this layer contains an \textbf{MQTT Broker}, which acts as a queue service bridging the edge and cloud layers. This is done by representing tasks as events to be parsed and reacted upon by the other layers.
+Therefore, the MQTT Broker serves as a queue service for bridging the edge layer to its required services. 
 
-The MQTT broker serves as a queue service for bridging the edge layer to its required services. The \textbf{face recognition service} extracts a feature vector from the image (also referred as image embeddings) and queries for it in the database using an API, which belongs to the next layer, the \textbf{cloud or application layer}. Figure \ref{fig:happy_flow}\index{happy_flow} shows this process.
+In this schema, the ESP32 \textit{publishes} a message to the broker as a \textbf{MeasurementTakenUnprofiled} event, which contains a \textbf{topic} name, a weight value and a vector of embeddings. The topic represents something similar to a table in a DBMS (Database Management System) and is used to separate event contexts. Consequently, the HubService \textit{consumes} the message and attempts to find the closer vector in the database and sends back a \textbf{MeasurementRegisteredProfiled} event so that the EPS32 is made aware everything went as expected. If the image does not match any registed profile, then the ESP32 is notified through the publishing of an \textbf{MeasurementFailedUnprofiled} event in the MQTT broker. Figure \ref{fig:flowchart}\index{flowchart} shows a simplified event flowchart for the system.
 
-Once the measurement is matched to a profile in the database, the \textbf{worker service} is able to upload it to the database through the same API used by the \textbf{face recognition service}. This is shown in Figure Figure \ref{fig:final_flow}\index{final_flow}. If the image does not match any registed profile, then the ESP32 is notified through the inclusion of an error message in the MQTT broker as shown in \ref{fig:sad_flow}\index{sad_flow}.
+\begin{figure}[ht]
+  \caption{Simplified event flowchart}
+  \centering
+  \includegraphics[scale=0.2]{flowchart}
+  \label{fig:flowchart}
+\end{figure}
 
+\begin{figure}[ht]
+  \caption{Event Flow when face is recognized}
+  \centering
+  \includegraphics[scale=0.2]{eventflowok}
+  \label{fig:eventflowok}
+\end{figure}
 
-This workflow follows and Event-Driven Architecture (EDA) and is made possible through the definition of topics within the MQTT broker. The \ref{fig:event_flow}\index{event_flow} shows the event flow for this subsystem of the PoC. Each event is always sent to its own topic, and services subscribe and publish to their topics of concern as shown in \ref{fig:mqtt_topics}\index{mqtt_topics}. 
+This workflow follows and Event-Driven Architecture (EDA) and is made possible through the definition of topics within the MQTT broker. Figure \ref{fig:eventflowok}\index{eventflowok} and {fig:eventflownotok}\index{eventflownotok} show the event flows for this subsystem of the PoC. Each event is always sent to its own topic, and services subscribe and publish to their topics of concern as Figure \ref{fig:mqttbroker}\index{mqttbroker} shows.
 
+\begin{figure}[ht]
+  \caption{Event Flow when face is not recognized}
+  \centering
+  \includegraphics[scale=0.2]{eventflownotok}
+  \label{fig:eventflownotok}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{MQTT Broker Topics and workflow}
+  \centering
+  \includegraphics[scale=0.05]{mqttbroker}
+  \label{fig:mqttbroker}
+\end{figure}
 
 \section{PoC cloud layer}
 
-The \textbf{cloud layer} consists of a PostgreSQL database for storing profiles and their measurements, an API for managing those records and allowing for applications to rise and use the available data. For this PoC, an example application is set in the form of a dashboard, for managing profiles and visualizing the measured weights for them.
+The \textbf{cloud layer} is comprised of the HubService and a PostgreSQL database for storing profiles, their face embeddings and their measurements. The HubService is implemented following the Hexagonal Architectural Pattern and consists of an API for managing accessing database records and an MQTT client to consume and publish events to the MQTT broker in the \textbf{fog layer}. For this PoC, a dashboard serves as an example application of how the system could be used. The dashboard serves for managing profiles and visualizing the measured weights for them.
 
-\section{PoC States and Events}
+The database is designed to be simple and yet efficient, storing data in three tables: \textbf{profile}, \textbf{profile measurement}, and \textbf{profile embedding}. The \textbf{profile} table stores scale users information and identifies them with an UUID (Universally unique identifier). The \textbf{profile measurement} records holds a reference id to the profile they belong to and the weight measurement value. Finnaly, the \textbf{profile embedding} table stores available feature vectors for a profile to be used by face matching algorithms. PostgreSQL is set up with the \textbf{pgvector} plug-in that allows for the storage and retrieval of vector types in an efficient manner.
 
-state machine of the scale
-event flows
+TODO inserir imagem do schema do banco aqui
+
+The HubService in its turn is implemented in Kotlin using the Spring Boot framework, which contains REST and MQTT abstraction layers for an easier implementation of those services. The Gradle build tool is used for faster deployment of the system and both the database and the service are contained in docker containers.
+
+The REST API serves endpoints for managing profiles, which includes creating, updating, and deleting profiles, as well as reading the available ones in the database. The API also contains two extra endpoints for adding new embeddings to a profile and for retrieving the measurements of a profile.
+
+Alongside the REST API, the Dashboard allows for using the API through a graphical user interface (GUI). Even though it is simple, it lets the scale users follow up all measurements available per profile. Figure \ref{fig:dashboard} shows the dashboard landing page. 
+
+\begin{figure}[ht]
+  \caption{Dashboard overview}
+  \centering
+  \includegraphics[scale=0.3]{dashboard}
+  \label{fig:dashboard}
+\end{figure}
+
+//aqui seguir explicando todos os caminhos de uso do dashboard e colocando os prints
+
+TODO add Swagger screenshot and list of endpoints
+
+//aqui explicar o caminho pelo qual os measurements chegam ao database por meio do mqtt adapter
 
 \section{Smart Scale Face Recognition}
 
 The Face Recognition aspect of the system has its complexities of its own. Specially, the set privacy concerns required novel solutions. The images used for profile matching are never stored in order to keep privacy untouched.
 
-The project uses an homomorphic encryption approach in which the feature vector of the system is used to represent it. This method allows for searching and comparison of images without the raw data.
+The project uses an homomorphic encryption approach in which the feature vector of the system is used to represent it. This method allows for searching and comparing images without the raw data.
 
 This is made possible through the usage of the pgvector plugin within the PostgreSQL database used. It allows for storage and query of vector, which eases the process of matching profiles to weighing subjects.
 
 Therefore, both during the registration of a profile and the taking of an image by the ESP32, the image embeddings are taken and used in place of the raw image data. This way biometric information is never stored, and is not kept in the \textbf{cloud layer}.
 
 \section{Project Evaluation}
+
+The PoC was evaluated in terms of how well the novel approaches proposed in literature could actually be implemented. More than that, we evaluate the face matching performance when using light pre-trained models that can run on an ESP32 and the overrall performance of the system by measuring latency of data flow across the whole solution.
+
+In order to measure face matching performance we compare different lighting conditions and percentage of retry request events in the communication between edge layer and cloud layer through the MQTT broker. Besides that, for performance we consider the different time values that are created for measurements, being those: measurement time (the moment the ESP32 sends the event with the measured value); record time (the moment the measurement is recorded in the database); and creation time (the moment the measurement is consumed and internalized in the HubService). Nevertheless, those KPIs (Key Performance Indicators) combined serve the purpose of evaluating the feasability and aplicability of the novel approaches gathered in the theorical foundation.
 
 \phantompart
 

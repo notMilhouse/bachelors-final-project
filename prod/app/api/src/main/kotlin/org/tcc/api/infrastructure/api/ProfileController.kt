@@ -2,6 +2,7 @@ package org.tcc.api.infrastructure.api
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.tcc.api.application.profile.ProfileService
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
-import org.tcc.api.application.profile.dto.ChangePasswordRequest
 import org.tcc.api.application.profile.dto.CreateProfileRequest
 import org.tcc.api.application.profile.dto.ProfileResponse
 import org.tcc.api.application.profile.dto.UpdateProfileRequest
@@ -21,6 +21,7 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/api/profiles")
+@CrossOrigin(origins = ["*"], allowedHeaders = ["*"])
 class ProfileController(
     private val profileService: ProfileService
 ) {
@@ -48,13 +49,6 @@ class ProfileController(
         return ResponseEntity.ok(profiles)
     }
 
-    @GetMapping("/by-email")
-    fun getProfileByEmail(@RequestParam email: String): ResponseEntity<ProfileResponse> {
-        val profile = profileService.getProfileByEmail(email)
-        return profile?.let { ResponseEntity.ok(it) }
-            ?: ResponseEntity.notFound().build()
-    }
-
     @PutMapping("/{id}")
     fun updateProfile(
         @PathVariable id: UUID,
@@ -62,20 +56,6 @@ class ProfileController(
     ): ResponseEntity<ProfileResponse> {
         return try {
             val profile = profileService.updateProfile(id, request)
-            profile?.let { ResponseEntity.ok(it) }
-                ?: ResponseEntity.notFound().build()
-        } catch (e: IllegalArgumentException) {
-            ResponseEntity.badRequest().build()
-        }
-    }
-
-    @PatchMapping("/{id}/password")
-    fun changePassword(
-        @PathVariable id: UUID,
-        @RequestBody request: ChangePasswordRequest
-    ): ResponseEntity<ProfileResponse> {
-        return try {
-            val profile = profileService.changePassword(id, request)
             profile?.let { ResponseEntity.ok(it) }
                 ?: ResponseEntity.notFound().build()
         } catch (e: IllegalArgumentException) {

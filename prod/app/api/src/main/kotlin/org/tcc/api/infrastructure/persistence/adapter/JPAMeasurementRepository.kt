@@ -3,9 +3,10 @@ package org.tcc.api.infrastructure.persistence.adapter
 import org.springframework.stereotype.Component
 import org.tcc.api.domain.measurement.Measurement
 import org.tcc.api.domain.measurement.MeasurementRepository
-import org.tcc.api.infrastructure.persistence.entity.MeasurementEntity
+import org.tcc.api.infrastructure.persistence.entity.MeasurementJPAEntity
 import org.tcc.api.infrastructure.persistence.jpa.SpringDataMeasurementRepository
 import org.tcc.api.infrastructure.persistence.jpa.SpringDataProfileRepository
+import java.sql.Timestamp
 import java.util.UUID
 
 @Component
@@ -15,15 +16,15 @@ class JPAMeasurementRepository (
 ) : MeasurementRepository {
 
     override fun save(measurement: Measurement): Measurement {
-        val id = measurement.id
         val profileEntity = profileRepository.findById(measurement.profileId)
-            .orElseThrow { IllegalArgumentException("Profile not found") }
+            .orElseThrow { IllegalArgumentException("Profile not found with id: ${measurement.profileId}") }
 
-        val entity = springDataRepository.findById(id).orElse(null)?.apply {
-            this.value = measurement.weightValue
-        } ?: MeasurementEntity(
-            id = id,
+        // Always create new measurement
+        val entity = MeasurementJPAEntity(
+            id = null,
             value = measurement.weightValue,
+            measuredAt = measurement.measuredAt,
+            recordedAt = Timestamp(System.currentTimeMillis()),
             profile = profileEntity
         )
 
@@ -55,12 +56,11 @@ class JPAMeasurementRepository (
         }
     }
 
-    private fun MeasurementEntity.toDomain() = Measurement(
+    private fun MeasurementJPAEntity.toDomain() = Measurement(
         id = this.id,
         weightValue = this.value,
-        profileId = this.profile.id,
-        recordedAt = this.recordedAt,
-        notes = this.notes,
-        createdAt = this.createdAt
+        profileId = this.profile.id!!,
+        measuredAt = this.measuredAt,
+        recordedAt = this.recordedAt
     )
 }

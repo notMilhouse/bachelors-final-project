@@ -1,48 +1,36 @@
 package org.tcc.api.infrastructure.persistence.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.ColumnDefault
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.math.BigDecimal
 import java.sql.Timestamp
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "profile_measurement")
-class MeasurementEntity(
+class MeasurementJPAEntity(
     @Id
-    @Column(columnDefinition = "UUID")
-    val id: UUID,
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "UUID", nullable = false)
+    val id: UUID? = null,
 
-    @Column(nullable = false)
-    var value: Double,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
-    val profile: ProfileEntity
-) {
-    @NotNull
-    @Column(name = "weight_value", nullable = false, precision = 5, scale = 2)
-    open var weightValue: BigDecimal? = null
+    @Column(name="weight_value", nullable = false)
+    var value: BigDecimal,
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "measured_at")
-    open var measuredAt: Timestamp = Timestamp(System.currentTimeMillis())
+    var measuredAt: Timestamp,
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "recorded_at")
-    open var recordedAt: Timestamp = Timestamp(System.currentTimeMillis())
+    var recordedAt: Timestamp = Timestamp(System.currentTimeMillis()),
 
-    @Column(name = "notes", length = Integer.MAX_VALUE)
-    open var notes: String = ""
-
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
-    open var createdAt: Timestamp = Timestamp(System.currentTimeMillis())
-}
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "profile_id", nullable = false)
+    var profile: ProfileJPAEntity,
+)

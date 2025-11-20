@@ -1,6 +1,5 @@
 package org.tcc.api.application.profile.dto
 
 data class UpdateProfileRequest(
-    val name: String,
-    val email: String
+    val name: String
 )

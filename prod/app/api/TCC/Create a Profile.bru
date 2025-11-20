@@ -1,0 +1,26 @@
+meta {
+  name: Create a Profile
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/profiles
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name":"Gabriel"
+  }
+}
+
+body:multipart-form {
+  name: Gabriel
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

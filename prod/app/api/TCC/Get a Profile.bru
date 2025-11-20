@@ -1,0 +1,20 @@
+meta {
+  name: Get a Profile
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/api/profiles/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: a18ac7a9-204f-4cf2-802c-6b74b61121ca
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

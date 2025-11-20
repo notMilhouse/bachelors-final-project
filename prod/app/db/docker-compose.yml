@@ -10,8 +10,8 @@ services:
     container_name: profile_measurements
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-profile_measurements}
-      POSTGRES_USER: ${POSTGRES_USER:-app_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app_password}
+      POSTGRES_USER: ${POSTGRES_USER:-tcc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tcc}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
@@ -20,7 +20,7 @@ services:
       - ./migrations:/docker-entrypoint-initdb.d
       - ./backups:/backups
     networks:
-      - default
+      - tcc
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app_user} -d ${POSTGRES_DB:-profile_measurements}"]
@@ -34,7 +34,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: profile_measurements_pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@tcc.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
@@ -42,7 +42,7 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
-      - default
+      - tcc
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,9 +57,6 @@ volumes:
     name: profile_measurements_pgadmin_data
 
 networks:
-  default:
-    name: profile_measurements_default
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
+  tcc:
+    name: tcc
+    external: true

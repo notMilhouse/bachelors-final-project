@@ -24,12 +24,10 @@ class MeasurementService(
             ?: throw IllegalArgumentException("Profile not found")
 
         val measurement = Measurement(
-            weightValue = request.value,
             profileId = profileId,
-            id = UUID.randomUUID(),
-            recordedAt = request.timeOfRecord,
-            notes = "",
-            createdAt = Timestamp(System.currentTimeMillis())
+            weightValue = request.value,
+            measuredAt = request.measuredAt,
+            id = null,
         )
 
         val savedMeasurement = measurementRepository.save(measurement)
@@ -60,6 +58,8 @@ class MeasurementService(
     private fun Measurement.toResponse() = MeasurementResponse(
         id = this.id,
         value = this.weightValue,
-        profileId = this.profileId
+        profileId = this.profileId,
+        measuredAt = this.measuredAt,
+        recordedAt = this.recordedAt,
     )
 }

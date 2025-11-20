@@ -3,10 +3,8 @@ package org.tcc.api.infrastructure.persistence.adapter
 import org.springframework.stereotype.Component
 import org.tcc.api.domain.profile.Profile
 import org.tcc.api.domain.profile.ProfileRepository
-import org.tcc.api.infrastructure.persistence.entity.ProfileEntity
+import org.tcc.api.infrastructure.persistence.entity.ProfileJPAEntity
 import org.tcc.api.infrastructure.persistence.jpa.SpringDataProfileRepository
-import java.sql.Timestamp
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
@@ -14,31 +12,37 @@ class JPAProfileRepository(
     private val springDataRepository: SpringDataProfileRepository
 ) : ProfileRepository {
 
+    // In JPAProfileRepository
     override fun save(profile: Profile): Profile {
-        val id = profile.id
-
-        val entity = ProfileEntity(
-            id = id,
-            name = profile.name,
-            email = profile.email,
-            passwordHash = profile.passwordHash,
-        )
+        val entity = if (profile.id == null) {
+            // Definitely new
+            createNewEntity(profile)
+        } else {
+            // Check if exists
+            springDataRepository.findById(profile.id!!).orElse(null)?.let {
+                // Exists - update it
+                updateExistingEntity(it, profile)
+            } ?: run {
+                // Doesn't exist - create new with this ID
+                createNewEntity(profile)
+            }
+        }
 
         val savedEntity = springDataRepository.save(entity)
         return savedEntity.toDomain()
     }
 
-    override fun update(profile: Profile): Profile {
-        val id = profile.id
-        val entity = springDataRepository.findById(id).orElse(null)?.apply {
-            this.name = profile.name
-            this.email = profile.email
-            this.passwordHash = profile.passwordHash
-            this.updatedAt = Timestamp.valueOf(LocalDateTime.now())
-        } ?: throw IllegalArgumentException("Profile with id ${profile.id} does not exist")
+    private fun createNewEntity(profile: Profile): ProfileJPAEntity {
+        return ProfileJPAEntity(
+            id = null,
+            name = profile.name
+        )
+    }
 
-        val savedEntity = springDataRepository.save(entity)
-        return savedEntity.toDomain()
+    private fun updateExistingEntity(entity: ProfileJPAEntity, profile: Profile): ProfileJPAEntity {
+        return entity.apply {
+            this.name = profile.name
+        }
     }
 
     override fun findById(id: UUID): Profile? {
@@ -47,34 +51,21 @@ class JPAProfileRepository(
             .orElse(null)
     }
 
-    override fun findByEmail(email: String): Profile? {
-        return springDataRepository.findByEmail(email)?.toDomain()
-    }
-
     override fun findAll(): List<Profile> {
         return springDataRepository.findAll().map { it.toDomain() }
     }
 
     override fun deleteById(id: UUID): Boolean {
-        return if (springDataRepository.existsById(id)) {
+        if (springDataRepository.existsById(id)) {
             springDataRepository.deleteById(id)
-            true
-        } else {
-            false
+            return true
         }
+
+        return false
     }
 
-    override fun existsByEmail(email: String): Boolean {
-        return springDataRepository.existsByEmail(email)
-    }
-
-    private fun ProfileEntity.toDomain() = Profile(
+    private fun ProfileJPAEntity.toDomain() = Profile(
         id = this.id,
         name = this.name,
-        email = this.email,
-        passwordHash = this.passwordHash,
-        profilePicturePath = this.profilePicturePath,
-        createdAt = this.createdAt,
-        updatedAt = this.updatedAt,
     )
 }

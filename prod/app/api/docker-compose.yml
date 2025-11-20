@@ -2,59 +2,40 @@
 version: '3.8'
 
 services:
-  kotlin-api:
+  hub-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: profile_measurements_api
+    container_name: hub_service
     environment:
-      DATABASE_URL: jdbc:postgresql://profile_measurements_postgres:5432/profile_measurements_app
-      DATABASE_USERNAME: ${DATABASE_USERNAME:-app_user}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-app_password}
+      DATABASE_URL: jdbc:postgresql://profile_measurements:5432/profile_measurements
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-tcc}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-tcc}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://profile_measurements:5432/profile_measurements
+      SPRING_DATASOURCE_USERNAME: tcc
+      SPRING_DATASOURCE_PASSWORD: tcc
       SERVER_PORT: 8080
-      SPRING_PROFILES_ACTIVE: ${ENVIRONMENT:-development}
-      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_here}
-      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
 
     ports:
       - "${API_PORT:-8080}:8080"
     volumes:
       - api_uploads:/app/uploads
     networks:
-      - profile_measurements_default
-    depends_on:
-      - db_health_check
+      - tcc
     restart: unless-stopped
-
-  db_health_check:
-    image: postgres:15-alpine
-    container_name: api_db_health_check
-    command: |
-      sh -c "
-        echo 'Waiting for database...'
-        until pg_isready -h profile_measurements_postgres -p 5432 -U app_user -d profile_measurements_app; do
-          sleep 3
-        done
-        echo 'Database is ready!'
-      "
-    networks:
-      - profile_measurements_default
-    depends_on:
-      - external_services
-
-  external_services:
-    image: alpine:latest
-    container_name: external_services_ref
-    command: "echo 'External services reference'"
-    networks:
-      - profile_measurements_default
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   api_uploads:
     driver: local
-    name: profile_measurements_api_uploads
+    name: hub_services_uploads
 
 networks:
-  profile_measurements_default:
+  tcc:
+    name: tcc
     external: true
-    name: profile_measurements_default

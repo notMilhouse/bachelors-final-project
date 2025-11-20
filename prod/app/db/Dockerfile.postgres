@@ -1,19 +1,13 @@
 # Dockerfile for PostgreSQL with custom initialization
-FROM postgres:15-alpine
+FROM pgvector/pgvector:pg17
 
 # Set environment variables for PostgreSQL
 ENV POSTGRES_DB=profile_measurements
-ENV POSTGRES_USER=app_user
-ENV POSTGRES_PASSWORD=app_password
-
-# Create directory for initialization scripts
-RUN mkdir -p /docker-entrypoint-initdb.d
+ENV POSTGRES_USER=tcc
+ENV POSTGRES_PASSWORD=tcc
 
 # Copy initialization scripts
 COPY migrations/ /docker-entrypoint-initdb.d/
-
-# Install additional PostgreSQL extensions if needed
-RUN apk add --no-cache postgresql-contrib
 
 # Expose PostgreSQL port
 EXPOSE 5432
@@ -21,6 +15,3 @@ EXPOSE 5432
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD pg_isready -U $POSTGRES_USER -d $POSTGRES_DB || exit 1
-
-# Use the default postgres entrypoint
-CMD ["postgres"]

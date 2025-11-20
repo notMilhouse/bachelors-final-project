@@ -1,1 +1,1 @@
-rootProject.name = "api"
+rootProject.name = "hub_service"

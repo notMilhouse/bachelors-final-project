@@ -1,58 +1,49 @@
--- Create database (uncomment and modify as needed)
--- CREATE DATABASE profile_measurements;
--- USE profile_measurements;
+-- create database
+-- create database profile_measurements;
+-- use profile_measurements;
 
--- Table: profile
--- Stores user account information
-CREATE TABLE profile (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL, -- Store hashed passwords, never plain text
-    profile_picture_path VARCHAR(500), -- File path to profile image
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Constraints
-    CONSTRAINT checker_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-    CONSTRAINT checker_name_length CHECK (LENGTH(TRIM(name)) >= 2)
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- table: profile
+-- stores user account information
+create table profile
+(
+    id                   uuid primary key default gen_random_uuid(),
+    name                 varchar(100)        not null
 );
 
--- Table: profile_measurement
--- Stores weight measurements for users
-CREATE TABLE profile_measurement (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    profile_id UUID NOT NULL,
-    weight_value DECIMAL(5,2) NOT NULL, 
-    measured_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, -- comes from esp32
-    recorded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, -- delta between recorded and measured represent delay between two timepoints
-    notes TEXT, -- Optional notes about the measurement
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Foreign key relationship
-    CONSTRAINT fk_profile_measurement_user_id
-        FOREIGN KEY (user_id) REFERENCES profile(id)
-        ON DELETE CASCADE,
-    
-    -- Constraints
-    CONSTRAINT checker_weight_reasonable CHECK (weight_value BETWEEN 1.0 AND 1000.0)
+-- table: profile_measurement
+-- stores weight measurements for users
+create table profile_measurement
+(
+    id           uuid primary key         default gen_random_uuid(),
+    profile_id   uuid          not null,
+    weight_value decimal(5, 2) not null,
+    measured_at  timestamp with time zone default current_timestamp, -- at esp32
+    recorded_at  timestamp with time zone default current_timestamp, -- at database
+
+    -- foreign key relationship
+    constraint fk_profile_measurement_profile_id
+        foreign key (profile_id) references profile (id)
+            on delete cascade
 );
 
--- Indexes for better query performance
-CREATE INDEX idx_profile_email ON profile(email);
-CREATE INDEX idx_profile_measurement_user_id ON profile_measurement(user_id);
-CREATE INDEX idx_profile_measurement_measured_at ON profile_measurement(measured_at);
-CREATE INDEX idx_profile_measurement_user_date ON profile_measurement(user_id, measured_at DESC);
+-- table: profile_embedding
+-- stores image embeddings for profile identification
+create table profile_embedding
+(
+    id         uuid primary key,
+    profile_id uuid not null,
+    embedding  vector(128),
+    -- foreign key relationship
+    constraint fk_profile_embeddings_profile_id
+        foreign key (profile_id) references profile (id)
+            on delete cascade
+);
 
--- Trigger to automatically update updated_at timestamp
-CREATE OR REPLACE FUNCTION update_updated_at_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
 
-CREATE TRIGGER update_profile_updated_at
-    BEFORE UPDATE ON profile
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- indexes for better query performance
+create index idx_profile_measurement_profile_id on profile_measurement (profile_id);
+create index idx_profile_embedding_cosine_ops on profile_embedding
+    using hnsw (embedding vector_cosine_ops)
+    with (m = 16, ef_construction = 64);
