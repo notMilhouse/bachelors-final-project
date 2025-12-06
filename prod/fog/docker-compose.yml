@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mosquitto:
+    # Use the official Eclipse Mosquitto image
+    image: eclipse-mosquitto:2.0
+    container_name: mqtt_broker
+    ports:
+      - "1883:1883"  # Default MQTT port
+      - "9001:9001"  # WebSocket port (good to have)
+    volumes:
+      # Mount the configuration file
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      # Mount volumes for persistent data and logs
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    restart: unless-stopped

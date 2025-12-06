@@ -268,7 +268,7 @@
   \ifnobibintoc\else
   \phantomsection
   % align bibname in toc and change its size
-  \addcontentsline{toc}{chapter}{\texorpdfstring{\MakeTextUppercase{\bibname}}{\bibname}}
+  \addcontentsline{toc}{chapter}{{\bibname}}
   \fi
   \prebibhook
 }
@@ -357,8 +357,8 @@
 \makeatletter
 \if@englishwr
 \def\@institution{University de São Paulo}
-\def\@faculty{Faculty of Sciences and Letters of Ribeir\~{a}o Preto}
-\def\@department{Department of Computing and Mathematics}
+\def\@faculty{Faculty of Philosophy, Sciences and Letters at Ribeir\~{a}o Preto}
+\def\@department{Department of Computer Science and Mathematics}
 \def\@program{Graduate Program in Applied Computing}
 \else
 \def\@institution{Universidade de S\~{a}o Paulo}

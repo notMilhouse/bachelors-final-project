@@ -25,14 +25,14 @@ class JPAEmbeddingRepository (
         val entity = if (embedding.id != null) {
             // Update existing
             springDataRepository.findById(embedding.id!!).orElse(null)?.apply {
-                this.embedding = embedding.embeddingVector
+                this.embedding = embedding.featureVector
                 this.profile = profileEntity
             } ?: throw IllegalArgumentException("Embedding not found with id: ${embedding.id}")
         } else {
             // Create new
             EmbeddingJPAEntity(
                 id = null,
-                embedding = embedding.embeddingVector,
+                embedding = embedding.featureVector,
                 profile = profileEntity
             )
         }
@@ -65,9 +65,13 @@ class JPAEmbeddingRepository (
         }
     }
 
+    override fun findProfileIdByDistance(featureVector: DoubleArray): UUID? {
+        TODO("Not yet implemented")
+    }
+
     private fun EmbeddingJPAEntity.toDomain() = Embedding(
         id = this.id,
-        embeddingVector = this.embedding,
+        featureVector = this.embedding,
         profileId = this.profile.id,
     )
 }

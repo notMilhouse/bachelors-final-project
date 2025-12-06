@@ -1,0 +1,24 @@
+meta {
+  name: Create embedding
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/api/embeddings/:profileId/create_embedding
+  body: multipartForm
+  auth: inherit
+}
+
+params:path {
+  profileId: a004937d-db77-4a53-add8-5c9012157181
+}
+
+body:multipart-form {
+  image: @file(/home/umgabrielcarvalho/Desktop/20251128013337.jpg)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

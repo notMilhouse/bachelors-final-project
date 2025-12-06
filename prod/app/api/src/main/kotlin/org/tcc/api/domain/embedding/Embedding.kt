@@ -5,7 +5,7 @@ import java.util.UUID
 data class Embedding (
     var id: UUID? = null,
     val profileId: UUID?,
-    val embeddingVector: DoubleArray
+    val featureVector: DoubleArray
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,7 +15,7 @@ data class Embedding (
 
         if (id != other.id) return false
         if (profileId != other.profileId) return false
-        if (!embeddingVector.contentEquals(other.embeddingVector)) return false
+        if (!featureVector.contentEquals(other.featureVector)) return false
 
         return true
     }
@@ -23,7 +23,7 @@ data class Embedding (
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + profileId.hashCode()
-        result = 31 * result + embeddingVector.contentHashCode()
+        result = 31 * result + featureVector.contentHashCode()
         return result
     }
 }

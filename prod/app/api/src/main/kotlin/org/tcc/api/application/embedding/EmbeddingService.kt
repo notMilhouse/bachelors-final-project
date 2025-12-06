@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.tcc.api.application.embedding.dto.CreateEmbeddingRequest
 import org.tcc.api.application.embedding.dto.EmbeddingResponse
+import org.tcc.api.application.embedding.dto.SearchEmbeddingRequest
 import org.tcc.api.domain.embedding.Embedding
 import org.tcc.api.domain.embedding.EmbeddingRepository
 import org.tcc.api.domain.profile.ProfileRepository
@@ -23,13 +24,19 @@ class EmbeddingService(
         profileRepository.findById(profileId)
             ?: throw IllegalArgumentException("Profile not found")
 
+        val imageEmbeddings = extractEmbeddings.retrieveEmbeddingVectorFromRequestImage(request.image)
+
         val embedding = Embedding(
             profileId = profileId,
-            embeddingVector = extractEmbeddings.retrieveEmbeddingVectorFromRequestImage(request.image),
+            featureVector = imageEmbeddings,
         )
 
         val savedEmbedding = embeddingRepository.save(embedding)
         return savedEmbedding.toResponse()
+    }
+    @Transactional(readOnly = true)
+    fun getEmbeddingProfileByDistance(request: SearchEmbeddingRequest): UUID? {
+        return embeddingRepository.findProfileIdByDistance(request.featureVector)
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +62,7 @@ class EmbeddingService(
 
     private fun Embedding.toResponse() = EmbeddingResponse(
         id = this.id,
-        embeddingVector = this.embeddingVector,
+        featureVector = this.featureVector,
         profileId = this.profileId
     )
 }

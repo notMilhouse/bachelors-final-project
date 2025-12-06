@@ -1,12 +1,11 @@
 package org.tcc.api.application.embedding
 
 import org.springframework.stereotype.Component
-import org.tcc.api.domain.embedding.Embedding
-import java.awt.Image
+import org.springframework.web.multipart.MultipartFile
 
 @Component
 class ExtractEmbeddings {
-    fun retrieveEmbeddingVectorFromRequestImage(image: Image): DoubleArray {
+    fun retrieveEmbeddingVectorFromRequestImage(image: MultipartFile): DoubleArray {
         return DoubleArray(128);
     }
 }

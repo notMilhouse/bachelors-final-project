@@ -8,4 +8,5 @@ interface EmbeddingRepository {
     fun findByProfileId(profileId: UUID): List<Embedding>
     fun findAll(): List<Embedding>
     fun deleteById(id: UUID): Boolean
+    fun findProfileIdByDistance(featureVector: DoubleArray): UUID?
 }
